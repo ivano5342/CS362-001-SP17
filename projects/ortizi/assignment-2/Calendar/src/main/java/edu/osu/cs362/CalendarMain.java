@@ -8,8 +8,6 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 
-
-
 public class CalendarMain {
 	public static void main(String[] args) {
         //Internal Diagnostic Messages turned on when true
