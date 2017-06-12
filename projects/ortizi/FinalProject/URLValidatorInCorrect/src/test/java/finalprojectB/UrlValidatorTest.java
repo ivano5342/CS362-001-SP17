@@ -42,28 +42,39 @@ public class UrlValidatorTest extends TestCase {
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   System.out.println(urlVal.isValid("http://www.amazon.com"));
-	   System.out.println(urlVal.isValid("http://www.google.com:80/test1"));
-	   System.out.println(urlVal.isValid("asdf://www.google.com:80/test1"));
-	   System.out.println(urlVal.isValid("a+://www.google.com:80/test1"));
-	   System.out.println(urlVal.isValid("a-://www.google.com:80/test1"));
-	   System.out.println(urlVal.isValid("a.://www.google.com:80/test1"));
-	   System.out.println(urlVal.isValid("a/://www.google.com:80/test1")); //test failed
-
-
-
-
-
-
+	   System.out.println(urlVal.isValid("http://www.google.com:80/test1")); //arbitrary url test
 	   
-	   
+	   //Example URI from rfc2396 that should work but a couple of them failed anyways
+	   System.out.println(urlVal.isValid("ftp://ftp.is.co.za/rfc/rfc1808.txt")); //failed
+	   System.out.println(urlVal.isValid("gopher://spinaltap.micro.umn.edu/00/Weather/California/Los%20Angeles")); //pass
+	   System.out.println(urlVal.isValid("http://www.math.uio.no/faq/compression-faq/part1.html"));  //failed
+	   System.out.println(urlVal.isValid("mailto:mduerst@ifi.unizh.ch"));  //failed
+	   System.out.println(urlVal.isValid("news:comp.infosystems.www.servers.unix")); //failed
+	   System.out.println(urlVal.isValid("telnet://melvyl.ucop.edu/"));  //pass
+
+
    }
    
-   
+   //Taking a closer look at the scheme
+   //Tests the scheme portion of the URL
    public void testYourFirstPartition()
    {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   System.out.println(urlVal.isValid("asdf://www.google.com:80/test1")); //scheme test
+	   System.out.println(urlVal.isValid("a+://www.google.com:80/test1")); //scheme test
+	   System.out.println(urlVal.isValid("a-://www.google.com:80/test1")); //scheme test
+	   System.out.println(urlVal.isValid("a.://www.google.com:80/test1")); //scheme test
+	   
+	   //Failed tests
+	   System.out.println(urlVal.isValid("a/://www.google.com:80/test1")); //no slashes in the scheme allowed
+	   System.out.println(urlVal.isValid(""));
+	   
+	   
 	   
    }
    
+   //Taking a closer look at the authority/path
+   //Tests the authority portion of the url
    public void testYourSecondPartition(){
 	   
    }
