@@ -42,15 +42,18 @@ public class UrlValidatorTest extends TestCase {
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   System.out.println(urlVal.isValid("http://www.amazon.com"));
-	   System.out.println(urlVal.isValid("http://www.google.com:80/test1")); //arbitrary url test
+	   System.out.println(urlVal.isValid("http://www.google.com:80/test1")); //arbitrary url test w/ port
 	   
-	   //Example URI from rfc2396 that should work but a couple of them failed anyways
+	   //Example URI from rfc2396 doc that should work but some them fail anyways
+	   System.out.println(urlVal.isValid("telnet://melvyl.ucop.edu/"));  //pass
 	   System.out.println(urlVal.isValid("ftp://ftp.is.co.za/rfc/rfc1808.txt")); //failed
 	   System.out.println(urlVal.isValid("gopher://spinaltap.micro.umn.edu/00/Weather/California/Los%20Angeles")); //pass
 	   System.out.println(urlVal.isValid("http://www.math.uio.no/faq/compression-faq/part1.html"));  //failed
-	   System.out.println(urlVal.isValid("mailto:mduerst@ifi.unizh.ch"));  //failed
-	   System.out.println(urlVal.isValid("news:comp.infosystems.www.servers.unix")); //failed
-	   System.out.println(urlVal.isValid("telnet://melvyl.ucop.edu/"));  //pass
+	   System.out.println(urlVal.isValid("http://www.ics.uci.edu/pub/ietf/uri/#Related")); //pass
+
+	   //Example URI from the rfc2396 doc that should not work 
+	   System.out.println(urlVal.isValid("news:comp.infosystems.www.servers.unix"));   
+	   System.out.println(urlVal.isValid("mailto:mduerst@ifi.unizh.ch"));   
 
 
    }
@@ -60,23 +63,41 @@ public class UrlValidatorTest extends TestCase {
    public void testYourFirstPartition()
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   
+	   //Passed scheme tests
 	   System.out.println(urlVal.isValid("asdf://www.google.com:80/test1")); //scheme test
-	   System.out.println(urlVal.isValid("a+://www.google.com:80/test1")); //scheme test
-	   System.out.println(urlVal.isValid("a-://www.google.com:80/test1")); //scheme test
-	   System.out.println(urlVal.isValid("a.://www.google.com:80/test1")); //scheme test
+	   System.out.println(urlVal.isValid("a+://www.google.com:80/test1")); //+ test
+	   System.out.println(urlVal.isValid("a-://www.google.com:80/test1")); //- test
+	   System.out.println(urlVal.isValid("a.://www.google.com:80/test1")); //. test
+	   System.out.println(urlVal.isValid("a1://www.google.com:80/test1")); //digit test
+
 	   
-	   //Failed tests
+	   //Failed scheme tests
 	   System.out.println(urlVal.isValid("a/://www.google.com:80/test1")); //no slashes in the scheme allowed
-	   System.out.println(urlVal.isValid(""));
-	   
-	   
+	   System.out.println(urlVal.isValid("://www.google.com:80/test1")); //no scheme
+	   System.out.println(urlVal.isValid("1://www.google.com:80/test1")); //bad scheme
+	   System.out.println(urlVal.isValid("#://www.google.com:80/test1")); //bad scheme
 	   
    }
    
    //Taking a closer look at the authority/path
    //Tests the authority portion of the url
    public void testYourSecondPartition(){
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   
+	   //Valid authority names
+	   System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   System.out.println(urlVal.isValid("http://a.com/b/c/d;p")); //com
+	   System.out.println(urlVal.isValid("http://a.net/b/c/d;p")); //net
+	   System.out.println(urlVal.isValid("http://a.org/b/c/d;p")); //org
+	   System.out.println(urlVal.isValid("http://a.edu/b/c/d;p")); //edu
+ 
+	   //Invalid authority domain names
+	   System.out.println(urlVal.isValid("http://www.icsuciedu/pub/ietf/uri/#Related")); //no domain name
+	   System.out.println(urlVal.isValid("http://a.meh/b/c/d;p")); //bad domain name
+	   System.out.println(urlVal.isValid("http://www.math.uio.no/faq/compression-faq/part1.html"));  //bad domain name
+
+
    }
    
    
